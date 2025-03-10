@@ -1,13 +1,32 @@
 import requests
 from .games.pokemon import PokemonTcgClient
+from games.tcg import TcgClient
 
 
 class CardNexusClient:
 
     def __init__(self, game):
         self.not_implemented = "This method is not supported for the selected game."
-        if game == 'pokemon':
+        if game == 'tcg':
+            self.client = TcgClient()
+        elif game == 'pokemon':
             self.client = PokemonTcgClient()
+
+    def fetch_all_tcg(self):
+        """Fetches all TCG games."""
+        if hasattr(self.client, 'get_all_tcg'):
+            return self.client.get_all_tcg()
+        else:
+            raise NotImplementedError(
+                self.not_implemented)
+
+    def fetch_tcg_by_identifier(self, identifier):
+        """Fetches a specific TCG game by its identifier."""
+        if hasattr(self.client, 'get_tcg_by_identifier'):
+            return self.client.get_tcg_by_identifier(identifier)
+        else:
+            raise NotImplementedError(
+                self.not_implemented)
 
     def fetch_all_eras(self):
         """Fetches all eras for the selected game."""
